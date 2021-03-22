@@ -1,0 +1,6 @@
+[submodule "autocv-server"]
+	path = autocv-server
+	url = https://github.com/youssefmzouri/autocv-server.git
+[submodule "autocv-client"]
+	path = autocv-client
+	url = https://github.com/youssefmzouri/autocv-client.git
