@@ -1,0 +1,394 @@
+{
+	"info": {
+		"_postman_id": "1490af16-d083-4627-a37a-9021b574c59e",
+		"name": "GitHub API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "AUTH",
+			"item": [
+				{
+					"name": "PASO 1. Request a user's GitHub identity",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://github.com/login/oauth/authorize?client_id={{client_id}}&scope=repo,user",
+							"protocol": "https",
+							"host": [
+								"github",
+								"com"
+							],
+							"path": [
+								"login",
+								"oauth",
+								"authorize"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "{{client_id}}"
+								},
+								{
+									"key": "scope",
+									"value": "repo,user"
+								}
+							]
+						},
+						"description": "When your GitHub App specifies a login parameter, it prompts users with a specific account they can use for signing in and authorizing your app.\n\nhttps://docs.github.com/en/developers/apps/authorizing-oauth-apps#web-application-flow\n\nhttps://www.youtube.com/watch?v=wcUdBgktd4s\n\nhttps://www.youtube.com/watch?v=R9lxXQcy-nM"
+					},
+					"response": []
+				},
+				{
+					"name": "PASO 2. Access token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"",
+									"  const res = pm.response.json();",
+									"",
+									"  pm.collectionVariables.set(\"access_token\", res.access_token);",
+									"  pm.collectionVariables.set(\"token_type\", res.token_type);",
+									"  pm.collectionVariables.set(\"scope\", res.scope);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "client_id",
+									"value": "{{client_id}}",
+									"description": "Required. The client ID you received from GitHub for your App GitHub.",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{client_secret}}",
+									"description": "Required. The client secret you received from GitHub for your App GitHub.",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "0b2616c7bdf5546cb688",
+									"description": "Required. The code you received as a response to Step 1.",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://github.com/login/oauth/access_token",
+							"protocol": "https",
+							"host": [
+								"github",
+								"com"
+							],
+							"path": [
+								"login",
+								"oauth",
+								"access_token"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "{{client_id}}",
+									"description": "Required. The client ID you received from GitHub for your App GitHub.",
+									"disabled": true
+								},
+								{
+									"key": "client_secret",
+									"value": "{{client_secret}}",
+									"description": "Required. The client secret you received from GitHub for your App GitHub.",
+									"disabled": true
+								},
+								{
+									"key": "code",
+									"value": "{{code}}",
+									"description": "Required. The code you received as a response to Step 1.",
+									"disabled": true
+								}
+							]
+						},
+						"description": "When your GitHub App specifies a login parameter, it prompts users with a specific account they can use for signing in and authorizing your app.\n\nhttps://docs.github.com/en/developers/apps/authorizing-oauth-apps#web-application-flow\n\nhttps://www.youtube.com/watch?v=wcUdBgktd4s\n\nhttps://www.youtube.com/watch?v=R9lxXQcy-nM"
+					},
+					"response": []
+				},
+				{
+					"name": "Contextual information for a user",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token_type}} {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{root_path}}/users/youssefmzouri/hovercard",
+							"host": [
+								"{{root_path}}"
+							],
+							"path": [
+								"users",
+								"youssefmzouri",
+								"hovercard"
+							]
+						},
+						"description": "Provides hovercard information when authenticated through basic auth or OAuth with the repo scope. You can find out more about someone in relation to their pull requests, issues, repositories, and organizations.\n\nhttps://docs.github.com/en/rest/reference/users#get-contextual-information-for-a-user"
+					},
+					"response": []
+				},
+				{
+					"name": "User with auth",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token_type}} {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{root_path}}/user",
+							"host": [
+								"{{root_path}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root_path}}",
+					"host": [
+						"{{root_path}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rate limit",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root_path}}/rate_limit",
+					"host": [
+						"{{root_path}}"
+					],
+					"path": [
+						"rate_limit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root_path}}/users",
+					"host": [
+						"{{root_path}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root_path}}/users/youssefmzouri",
+					"host": [
+						"{{root_path}}"
+					],
+					"path": [
+						"users",
+						"youssefmzouri"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User repos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root_path}}/users/octocat/repos",
+					"host": [
+						"{{root_path}}"
+					],
+					"path": [
+						"users",
+						"octocat",
+						"repos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Repo branches",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.github.com/repos/youssefmzouri/autocv-server/branches",
+					"protocol": "https",
+					"host": [
+						"api",
+						"github",
+						"com"
+					],
+					"path": [
+						"repos",
+						"youssefmzouri",
+						"autocv-server",
+						"branches"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User gists",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.github.com/users/youssefmzouri/gists",
+					"protocol": "https",
+					"host": [
+						"api",
+						"github",
+						"com"
+					],
+					"path": [
+						"users",
+						"youssefmzouri",
+						"gists"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User repo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.github.com/repos/octocat/boysenberry-repo-1",
+					"protocol": "https",
+					"host": [
+						"api",
+						"github",
+						"com"
+					],
+					"path": [
+						"repos",
+						"octocat",
+						"boysenberry-repo-1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "root_path",
+			"value": "https://api.github.com"
+		},
+		{
+			"key": "auth_token",
+			"value": ""
+		},
+		{
+			"key": "client_id",
+			"value": "eaefef93551bd215b3c1"
+		},
+		{
+			"key": "client_secret",
+			"value": "1d326092caa838a2be55cd57efc7dee8235053c3"
+		},
+		{
+			"key": "code",
+			"value": ""
+		},
+		{
+			"key": "access_token",
+			"value": "21afd6bee7b2924dc4f5e4173f3da3365ef290ba"
+		},
+		{
+			"key": "scope",
+			"value": "repo,user"
+		},
+		{
+			"key": "token_type",
+			"value": "bearer"
+		}
+	]
+}
