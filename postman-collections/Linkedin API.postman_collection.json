@@ -1,0 +1,63 @@
+{
+	"info": {
+		"_postman_id": "be951168-c9b5-4ab0-a1a9-8d1c52f93842",
+		"name": "Linkedin API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "button to press for obtain access_token",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.linkedin.com/oauth/v2/authorization?response_type=code&state=987654321&scope=r_liteprofile&client_id=77s5xtljrv0d5h&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fuser%2Fsignin%2Flinkedin%2Fcallback",
+					"protocol": "https",
+					"host": [
+						"www",
+						"linkedin",
+						"com"
+					],
+					"path": [
+						"oauth",
+						"v2",
+						"authorization"
+					],
+					"query": [
+						{
+							"key": "response_type",
+							"value": "code"
+						},
+						{
+							"key": "state",
+							"value": "987654321"
+						},
+						{
+							"key": "scope",
+							"value": "r_liteprofile",
+							"description": "El que me gustaria realmente es: r_fullprofile. PEro hay que enviar un correo pidiendo permiso."
+						},
+						{
+							"key": "client_id",
+							"value": "77s5xtljrv0d5h"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "http%3A%2F%2Flocalhost%3A5000%2Fuser%2Fsignin%2Flinkedin%2Fcallback"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Me",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		}
+	]
+}
